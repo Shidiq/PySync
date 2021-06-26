@@ -8,13 +8,24 @@ import os
 import shutil
 from tqdm import tqdm
 import datetime
+from tkinter import filedialog
+from tkinter import Tk
 
 print("\n==================================")
-print(f"          PySync v.0.0.1           ")
+print(f"          PySync v.0.0.2           ")
 print("==================================\n")
 
+
+def getroot():
+    root = Tk()
+    root.withdraw()
+    root.dirname = filedialog.askdirectory()
+    return root.dirname
+
+
 # source
-sourcepath = "/Users/shidiq/GeNose"
+# sourcepath = "/Users/shidiq/GeNose"
+sourcepath = getroot()
 
 # destination
 target = "/Volumes/99% VIRUS"
@@ -31,7 +42,7 @@ for folder in tqdm(folders, total=len(folders), desc='Scanning folders: '):
             fullpath = os.path.join(folder, item)
             if os.path.isfile(fullpath):
                 despath = os.path.join(target, fullpath[fullpath.find(base):])
-                if os.path.isfile(despath):
+                if os.path.exists(despath):
                     if os.stat(fullpath).st_mtime - os.stat(despath).st_mtime > 1:
                         shutil.copy2(fullpath, despath)
                         icopy += 1
